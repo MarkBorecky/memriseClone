@@ -1,0 +1,56 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.grupa3.memriseclone",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.10.5",
+    "applicationType": "monolith",
+    "baseName": "memriseClone",
+    "packageName": "com.grupa3.memriseclone",
+    "packageFolder": "com/grupa3/memriseclone",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "prodDatabaseType": "mongodb",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MThjOTQ1Nzg5Y2M1MmNiMGMxNTViZjJkZThjNWM2ODJlNGZkODQ0NDQxYjYyMzQwNjk2MWVhNGJmZWVmOTI4MTNiMjQ5OGI2MmI5MjAxNjZlYTlhYjcyNTdiMDU3OTM1OTMxNTdjMmYzODEwZTEzOGEzNjhjOGY5MGZlNmQ1YjE=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "united",
+    "clientThemeVariant": "dark",
+    "creationTimestamp": 1606040416573,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-primeng",
+        "version": "9.1.0"
+      },
+      {
+        "name": "generator-jhipster-imageblobcache",
+        "version": "1.0.2"
+      },
+      {
+        "name": "generator-jhipster-imageblobindexation",
+        "version": "2.0.3"
+      }
+    ],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en"],
+    "blueprints": []
+  }
+}
