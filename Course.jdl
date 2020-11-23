@@ -1,0 +1,26 @@
+entity Course {
+    name String required,
+    description String
+}
+
+entity Tag {
+    lang String required
+}
+
+entity Item {
+    word String required,
+    translation String required,
+    exampleSentence String,
+    translationExampleSentence String,
+    image ImageBlob,
+    audio AnyBlob
+}
+
+relationship ManyToOne {
+    Course{user(login)} to User,
+    Tag{course(name)} to Course,
+    Item{course(name)} to Course
+}
+
+paginate Course with infinite-scroll
+

@@ -1,0 +1,32 @@
+{
+  "name": "Tag",
+  "fields": [
+    {
+      "fieldName": "lang",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "course",
+      "otherEntityRelationshipName": "tag",
+      "relationshipName": "course",
+      "otherEntityField": "name"
+    }
+  ],
+  "changelogDate": "20201123130516",
+  "entityTableName": "tag",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}
