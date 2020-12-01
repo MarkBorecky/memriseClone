@@ -84,8 +84,6 @@
     "tslint": "6.1.2",
     "typescript": "3.9.5",
     "generator-jhipster-primeng": "9.1.0",
-    "generator-jhipster-imageblobcache": "1.0.2",
-    "generator-jhipster-imageblobindexation": "2.0.3",
     "webpack": "4.43.0",
     "webpack-bundle-analyzer": "3.8.0",
     "webpack-cli": "3.3.12",

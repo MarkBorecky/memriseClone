@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * Integrations tests for {@link DomainUserDetailsService}.
  */
 @SpringBootTest(classes = MemriseCloneApp.class)
+@Transactional
 public class DomainUserDetailsServiceIT {
 
     private static final String USER_ONE_LOGIN = "test-user-one";
@@ -38,8 +40,6 @@ public class DomainUserDetailsServiceIT {
 
     @BeforeEach
     public void init() {
-        userRepository.deleteAll();
-
         User userOne = new User();
         userOne.setLogin(USER_ONE_LOGIN);
         userOne.setPassword(RandomStringUtils.random(60));

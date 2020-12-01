@@ -14,7 +14,7 @@
       "diskSpace": "Disk space",
       "mail": "Email",
       "ping": "Application",
-      "mongo": "MongoDB"
+      "db": "Database"
     },
     "table": {
       "service": "Service name",

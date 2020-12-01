@@ -29,16 +29,29 @@ spring:
   devtools:
     restart:
       enabled: true
-      additional-exclude: static/**
+      additional-exclude: static/**,.h2.server.properties
     livereload:
       enabled: false # we use Webpack dev server + BrowserSync for livereload
   jackson:
     serialization:
       indent-output: true
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017
-      database: memriseClone
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:mem:memriseclone;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: memriseClone
+    password:
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  h2:
+    console:
+      enabled: false
+  jpa:
+    database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+    show-sql: true
+  liquibase:
+    # Remove 'faker' if you do not want the sample data to be loaded automatically
+    contexts: dev, faker
   mail:
     host: localhost
     port: 25
@@ -75,7 +88,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: MThjOTQ1Nzg5Y2M1MmNiMGMxNTViZjJkZThjNWM2ODJlNGZkODQ0NDQxYjYyMzQwNjk2MWVhNGJmZWVmOTI4MTNiMjQ5OGI2MmI5MjAxNjZlYTlhYjcyNTdiMDU3OTM1OTMxNTdjMmYzODEwZTEzOGEzNjhjOGY5MGZlNmQ1YjE=
+        base64-secret: OTA2NDVjMDk2NGM4NTdmNzUwOTAxZTFjYjRkODUxZGFiYTYxNzAzNzgxOTZjMTY2ZTdmYWNmYjYwNTE0NzcyNDc5MWRhNWM4YmQ1YmNhNTg4N2ZkYjU5OTI4MTI5MjdiNjhjMGY5N2ZmYTE1YjEwMWI1MGZkYTFiMTU1OGJkYTQ=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
