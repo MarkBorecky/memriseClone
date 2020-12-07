@@ -1,0 +1,79 @@
+<div>
+    <h2 id="page-heading">
+        <span>User Items</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-user-item" [routerLink]="['/user-item/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span>
+            Create a new User Item
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="userItems?.length === 0">
+        <span>No userItems found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="userItems && userItems.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span>ID</span></th>
+                    <th scope="col" ><span>Learned</span></th>
+                    <th scope="col" ><span>Correct Answers</span></th>
+                    <th scope="col" ><span>Wrong Answers</span></th>
+                    <th scope="col" ><span>Last Correct Answer</span></th>
+                    <th scope="col" ><span>Planned Reminder</span></th>
+                    <th scope="col" ><span>Item</span></th>
+                    <th scope="col" ><span>User</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let userItem of userItems ;trackBy: trackId">
+                    <td><a [routerLink]="['/user-item', userItem.id, 'view']">{{ userItem.id }}</a></td>
+                    <td>{{ userItem.learned }}</td>
+                    <td>{{ userItem.correctAnswers }}</td>
+                    <td>{{ userItem.wrongAnswers }}</td>
+                    <td>{{ userItem.lastCorrectAnswer | date:'mediumDate' }}</td>
+                    <td>{{ userItem.plannedReminder | date:'mediumDate' }}</td>
+                    <td>
+                        <div *ngIf="userItem.item">
+                            <a [routerLink]="['/item', userItem.item?.id, 'view']" >{{ userItem.item?.id }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        {{ userItem.user?.id }}
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/user-item', userItem.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/user-item', userItem.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(userItem)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

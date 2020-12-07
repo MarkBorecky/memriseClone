@@ -1,0 +1,40 @@
+entity Course {
+    name String required,
+    learningLanguage Language required,
+    baseLanguage Language required,
+    description String
+}
+
+entity Item {
+    word String required,
+    translation String required,
+    exampleSentence String,
+    translationExampleSentence String,
+    image ImageBlob,
+    audio AnyBlob
+}
+
+entity UserItem {
+	learned Boolean required,
+    correctAnswers Integer required,
+    wrongAnswers Integer required,
+    lastCorrectAnswer LocalDate,
+    plannedReminder LocalDate
+}
+
+enum Language {
+	Polish ("Polish"),
+    English ("English")
+}
+
+relationship ManyToOne {
+    Course{user} to User,
+    Item{course(name)} to Course
+    UserItem{user} to User
+}
+
+relationship OneToOne {
+	UserItem{item} to Item
+}
+
+paginate Course with infinite-scroll
