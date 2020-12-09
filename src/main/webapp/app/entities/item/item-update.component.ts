@@ -10,7 +10,7 @@ import { IItem, Item } from 'app/shared/model/item.model';
 import { ItemService } from './item.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { ICourse } from 'app/shared/model/course.model';
-import { CourseService } from 'app/entities/course/course.service';
+import { CourseService } from 'app/course/course.service';
 
 @Component({
   selector: 'jhi-item-update',
