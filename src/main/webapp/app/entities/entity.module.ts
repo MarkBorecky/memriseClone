@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: 'course',
-        loadChildren: () => import('./course/course.module').then(m => m.MemriseCloneCourseModule),
+        loadChildren: () => import('app/course/course.module').then(m => m.MemriseCloneCourseModule),
       },
       {
         path: 'item',
