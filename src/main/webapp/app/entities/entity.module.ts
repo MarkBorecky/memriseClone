@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
       },
       {
         path: 'item',
-        loadChildren: () => import('./item/item.module').then(m => m.MemriseCloneItemModule),
+        loadChildren: () => import('../course/item/item.module').then(m => m.MemriseCloneItemModule),
       },
       {
         path: 'user-item',

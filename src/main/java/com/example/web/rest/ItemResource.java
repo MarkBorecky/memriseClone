@@ -105,6 +105,18 @@ public class ItemResource {
     }
 
     /**
+     * {@code GET  /items/course/:courseId} : get the "id" course.
+     *
+     * @param courseId the id of the course to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the item.
+     */
+    @GetMapping("/items/course/{courseId}")
+    public List<Item> getItemsbyCourseId(@PathVariable Long courseId) {
+        log.debug("REST request to get Item : {}", courseId);
+        return itemRepository.findByCourseId(courseId);
+    }
+
+    /**
      * {@code DELETE  /items/:id} : delete the "id" item.
      *
      * @param id the id of the item to delete.
