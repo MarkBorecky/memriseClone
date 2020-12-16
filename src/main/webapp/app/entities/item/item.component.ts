@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
@@ -7,12 +7,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IItem } from 'app/shared/model/item.model';
 import { ItemService } from './item.service';
 import { ItemDeleteDialogComponent } from './item-delete-dialog.component';
+import { ICourse } from 'app/shared/model/course.model';
 
 @Component({
   selector: 'jhi-item',
   templateUrl: './item.component.html',
 })
 export class ItemComponent implements OnInit, OnDestroy {
+  @Input() courseId: number | null = null;
   items?: IItem[];
   eventSubscriber?: Subscription;
 
@@ -24,7 +26,11 @@ export class ItemComponent implements OnInit, OnDestroy {
   ) {}
 
   loadAll(): void {
-    this.itemService.query().subscribe((res: HttpResponse<IItem[]>) => (this.items = res.body || []));
+    this.itemService
+      .query({
+        course: this.courseId,
+      })
+      .subscribe((res: HttpResponse<IItem[]>) => (this.items = res.body || []));
   }
 
   ngOnInit(): void {
