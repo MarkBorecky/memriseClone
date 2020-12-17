@@ -12,10 +12,10 @@ import { RouterModule } from '@angular/router';
 //        path: 'item',
 //      loadChildren: () => import('./item/item.module').then(m => m.MemriseCloneItemModule),
 //     },
-      {
-        path: 'user-item',
-        loadChildren: () => import('./user-item/user-item.module').then(m => m.MemriseCloneUserItemModule),
-      },
+//      {
+//        path: 'user-item',
+//        loadChildren: () => import('./user-item/user-item.module').then(m => m.MemriseCloneUserItemModule),
+//      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],
