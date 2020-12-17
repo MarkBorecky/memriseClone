@@ -8,10 +8,10 @@ import { RouterModule } from '@angular/router';
         path: 'course',
         loadChildren: () => import('app/course/course.module').then(m => m.MemriseCloneCourseModule),
       },
-      {
-        path: 'item',
-        loadChildren: () => import('./item/item.module').then(m => m.MemriseCloneItemModule),
-      },
+//      {
+//        path: 'item',
+//      loadChildren: () => import('./item/item.module').then(m => m.MemriseCloneItemModule),
+//     },
       {
         path: 'user-item',
         loadChildren: () => import('./user-item/user-item.module').then(m => m.MemriseCloneUserItemModule),
