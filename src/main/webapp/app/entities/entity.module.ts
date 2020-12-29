@@ -8,14 +8,14 @@ import { RouterModule } from '@angular/router';
         path: 'course',
         loadChildren: () => import('app/course/course.module').then(m => m.MemriseCloneCourseModule),
       },
-      {
-        path: 'item',
-        loadChildren: () => import('../course/item/item.module').then(m => m.MemriseCloneItemModule),
-      },
-      {
-        path: 'user-item',
-        loadChildren: () => import('./user-item/user-item.module').then(m => m.MemriseCloneUserItemModule),
-      },
+      //      {
+      //        path: 'item',
+      //      loadChildren: () => import('./item/item.module').then(m => m.MemriseCloneItemModule),
+      //     },
+      //      {
+      //        path: 'user-item',
+      //        loadChildren: () => import('./user-item/user-item.module').then(m => m.MemriseCloneUserItemModule),
+      //      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],
