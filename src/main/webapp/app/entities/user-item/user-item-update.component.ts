@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 import { IUserItem, UserItem } from 'app/shared/model/user-item.model';
 import { UserItemService } from './user-item.service';
 import { IItem } from 'app/shared/model/item.model';
-import { ItemService } from 'app/entities/item/item.service';
+import { ItemService } from 'app/course/item/item.service';
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 

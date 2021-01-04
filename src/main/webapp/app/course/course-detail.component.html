@@ -28,19 +28,108 @@
                 <dd>
                     {{ course.user?.id }}
                 </dd>
+                <dt><span>Course ID</span></dt>
+                <dd>
+                    {{ course.id }}
+                </dd>
             </dl>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
+            <div>
+                <h2 id="page-heading">
+                    <span>Items</span>
+            
+                    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-item" [routerLink]="['/item/new']">
+                        <fa-icon icon="plus"></fa-icon>
+                        <span>
+                        Create a new Item
+                        </span>
+                    </button>
+                </h2>
+            
+                <jhi-alert-error></jhi-alert-error>
+            
+                <jhi-alert></jhi-alert>
+            
+                <div class="alert alert-warning" id="no-result" *ngIf="items?.length === 0">
+                    <span>No items found</span>
+                </div>
+            
+                <div class="table-responsive" id="entities" *ngIf="items && items.length > 0">
+                    <table class="table table-striped" aria-describedby="page-heading">
+                        <thead>
+                            <tr>
+                                <th scope="col" ><span>ID</span></th>
+                                <th scope="col" ><span>Word</span></th>
+                                <th scope="col" ><span>Translation</span></th>
+                                <th scope="col" ><span>Example Sentence</span></th>
+                                <th scope="col" ><span>Translation Example Sentence</span></th>
+                                <th scope="col" ><span>Image</span></th>
+                                <th scope="col" ><span>Audio</span></th>
+                                <th scope="col" ><span>Course</span></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of items ;trackBy: trackId">
+                                <td><a [routerLink]="['/item', item.id, 'view']">{{ item.id }}</a></td>
+                                <td>{{ item.word }}</td>
+                                <td>{{ item.translation }}</td>
+                                <td>{{ item.exampleSentence }}</td>
+                                <td>{{ item.translationExampleSentence }}</td>
+                                <td>
+                                    <a *ngIf="item.image" (click)="openFile(item.imageContentType, item.image)">
+                                        <img [src]="'data:' + item.imageContentType + ';base64,' + item.image" style="max-height: 30px;" alt="item image"/>
+                                    </a>
+                                    <span *ngIf="item.image">{{ item.imageContentType }}, {{ byteSize(item.image) }}</span>
+                                </td>
+                                <td>
+                                    <a *ngIf="item.audio" (click)="openFile(item.audioContentType, item.audio)">open</a>
+                                    <span *ngIf="item.audio">{{ item.audioContentType }}, {{ byteSize(item.audio) }}</span>
+                                </td>
+                                <td>
+                                    <div *ngIf="item.course">
+                                        <a [routerLink]="['/course', item.course?.id, 'view']" >{{ item.course?.name }}</a>
+                                    </div>
+                                </td>
+                                <td class="text-right">
+                                    <div class="btn-group">
+                                        <button type="submit"
+                                                [routerLink]="['/item', item.id, 'view']"
+                                                class="btn btn-info btn-sm">
+                                            <fa-icon icon="eye"></fa-icon>
+                                            <span class="d-none d-md-inline">View</span>
+                                        </button>
+            
+                                        <button type="submit"
+                                                [routerLink]="['/item', item.id, 'edit']"
+                                                class="btn btn-primary btn-sm">
+                                            <fa-icon icon="pencil-alt"></fa-icon>
+                                            <span class="d-none d-md-inline">Edit</span>
+                                        </button>
+            
+                                        <button type="submit" (click)="delete(item)"
+                                                class="btn btn-danger btn-sm">
+                                            <fa-icon icon="times"></fa-icon>
+                                            <span class="d-none d-md-inline">Delete</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+
+            <button type="submit" (click)="previousState()" class="btn btn-info">
                 <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
             </button>
 
-            <button type="button"
-                    [routerLink]="['/course', course.id, 'edit']"
-                    class="btn btn-primary">
+            <button type="button" [routerLink]="['/course', course.id, 'edit']" class="btn btn-primary">
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
             </button>
+
+            <!-- <jhi-item [courseId]="courseId"></jhi-item> -->
         </div>
     </div>
 </div>

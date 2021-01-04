@@ -8,7 +8,6 @@ import { Authority } from 'app/shared/constants/authority.constants';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { IItem, Item } from 'app/shared/model/item.model';
 import { ItemService } from './item.service';
-import { ItemComponent } from './item.component';
 import { ItemDetailComponent } from './item-detail.component';
 import { ItemUpdateComponent } from './item-update.component';
 
@@ -35,15 +34,6 @@ export class ItemResolve implements Resolve<IItem> {
 }
 
 export const itemRoute: Routes = [
-  {
-    path: '',
-    component: ItemComponent,
-    data: {
-      authorities: [Authority.USER],
-      pageTitle: 'Items',
-    },
-    canActivate: [UserRouteAccessService],
-  },
   {
     path: ':id/view',
     component: ItemDetailComponent,

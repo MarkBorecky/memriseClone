@@ -27,6 +27,10 @@ export class ItemService {
     return this.http.get<IItem>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findByCourseId(courseId: number | undefined): Observable<EntityArrayResponseType> {
+    return this.http.get<IItem[]>(`${this.resourceUrl}/course/${courseId}`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IItem[]>(this.resourceUrl, { params: options, observe: 'response' });
