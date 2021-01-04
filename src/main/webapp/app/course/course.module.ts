@@ -8,11 +8,22 @@ import { CourseUpdateComponent } from './course-update.component';
 import { CourseDeleteDialogComponent } from './course-delete-dialog.component';
 import { courseRoute } from './course.route';
 import { itemRoute } from './item/item.route';
+import { ItemDeleteDialogComponent } from './item/item-delete-dialog.component';
+import { ItemDetailComponent } from './item/item-detail.component';
+import { ItemUpdateComponent } from './item/item-update.component';
 
 @NgModule({
   imports: [MemriseCloneSharedModule, RouterModule.forChild(courseRoute), RouterModule.forChild(itemRoute)],
-  declarations: [CourseComponent, CourseDetailComponent, CourseUpdateComponent, CourseDeleteDialogComponent],
-  entryComponents: [CourseDeleteDialogComponent],
-  schemas: [NO_ERRORS_SCHEMA],
+  declarations: [
+    CourseComponent,
+    CourseDetailComponent,
+    CourseUpdateComponent,
+    CourseDeleteDialogComponent,
+    ItemDetailComponent,
+    ItemUpdateComponent,
+    ItemDeleteDialogComponent,
+  ],
+  entryComponents: [CourseDeleteDialogComponent, ItemDeleteDialogComponent],
+  // schemas: [NO_ERRORS_SCHEMA],
 })
 export class MemriseCloneCourseModule {}
