@@ -1,4 +1,4 @@
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { MemriseCloneSharedModule } from 'app/shared/shared.module';
@@ -24,6 +24,5 @@ import { ItemUpdateComponent } from './item/item-update.component';
     ItemDeleteDialogComponent,
   ],
   entryComponents: [CourseDeleteDialogComponent, ItemDeleteDialogComponent],
-  // schemas: [NO_ERRORS_SCHEMA],
 })
 export class MemriseCloneCourseModule {}
