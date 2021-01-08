@@ -170,6 +170,17 @@ public class UserResource {
         return userService.getAuthorities();
     }
 
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable long id) {
+        log.debug("REST request to get User : {}", id);
+        return ResponseUtil.wrapOrNotFound(
+            userService.getUserById(id)
+                .map(UserDTO::new));
+
+
+    }
+
     /**
      * {@code GET /users/:login} : get the "login" user.
      *

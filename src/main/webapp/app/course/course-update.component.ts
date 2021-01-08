@@ -10,13 +10,18 @@ import { CourseService } from './course.service';
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 @Component({
   selector: 'jhi-course-update',
   templateUrl: './course-update.component.html',
 })
 export class CourseUpdateComponent implements OnInit {
   isSaving = false;
-  users: IUser[] = [];
+
+  user: IUser | null = null;
+
+  id: string;
 
   editForm = this.fb.group({
     id: [],
@@ -24,23 +29,16 @@ export class CourseUpdateComponent implements OnInit {
     learningLanguage: [null, [Validators.required]],
     baseLanguage: [null, [Validators.required]],
     description: [],
-    user: [],
+    user: this.user,
   });
 
   constructor(
+    private accountService: AccountService,
     protected courseService: CourseService,
     protected userService: UserService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
-
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ course }) => {
-      this.updateForm(course);
-
-      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
-    });
-  }
 
   updateForm(course: ICourse): void {
     this.editForm.patchValue({
@@ -49,7 +47,7 @@ export class CourseUpdateComponent implements OnInit {
       learningLanguage: course.learningLanguage,
       baseLanguage: course.baseLanguage,
       description: course.description,
-      user: course.user,
+      user: this.user,
     });
   }
 
