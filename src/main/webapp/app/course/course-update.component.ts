@@ -9,6 +9,7 @@ import { ICourse, Course } from 'app/shared/model/course.model';
 import { CourseService } from './course.service';
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
+import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'jhi-course-update',
@@ -16,7 +17,8 @@ import { UserService } from 'app/core/user/user.service';
 })
 export class CourseUpdateComponent implements OnInit {
   isSaving = false;
-  users: IUser[] = [];
+  login: string | undefined = '';
+  user: IUser | undefined = undefined;
 
   editForm = this.fb.group({
     id: [],
@@ -24,21 +26,22 @@ export class CourseUpdateComponent implements OnInit {
     learningLanguage: [null, [Validators.required]],
     baseLanguage: [null, [Validators.required]],
     description: [],
-    user: [],
+    user: this.user,
   });
 
   constructor(
     protected courseService: CourseService,
     protected userService: UserService,
     protected activatedRoute: ActivatedRoute,
+    protected accountService: AccountService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ course }) => {
       this.updateForm(course);
-
-      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
+      this.accountService.getAuthenticationState().subscribe(account => (this.login = account?.login));
+      this.userService.find(this.login ? this.login : '').subscribe(res => (this.user = res || undefined));
     });
   }
 
@@ -49,7 +52,7 @@ export class CourseUpdateComponent implements OnInit {
       learningLanguage: course.learningLanguage,
       baseLanguage: course.baseLanguage,
       description: course.description,
-      user: course.user,
+      user: this.user,
     });
   }
 
@@ -75,7 +78,7 @@ export class CourseUpdateComponent implements OnInit {
       learningLanguage: this.editForm.get(['learningLanguage'])!.value,
       baseLanguage: this.editForm.get(['baseLanguage'])!.value,
       description: this.editForm.get(['description'])!.value,
-      user: this.editForm.get(['user'])!.value,
+      user: this.user,
     };
   }
 
