@@ -18,7 +18,8 @@ import { CourseService } from 'app/course/course.service';
 })
 export class ItemUpdateComponent implements OnInit {
   isSaving = false;
-  courses: ICourse[] = [];
+  course: ICourse | null = null;
+  courseId: string | undefined;
 
   editForm = this.fb.group({
     id: [],
@@ -46,8 +47,8 @@ export class ItemUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ item }) => {
       this.updateForm(item);
-
-      this.courseService.query().subscribe((res: HttpResponse<ICourse[]>) => (this.courses = res.body || []));
+      this.courseId = item.id;
+      this.courseService.find(item.id).subscribe((res: HttpResponse<ICourse>) => (this.course = res.body));
     });
   }
 
@@ -62,7 +63,7 @@ export class ItemUpdateComponent implements OnInit {
       imageContentType: item.imageContentType,
       audio: item.audio,
       audioContentType: item.audioContentType,
-      course: item.course,
+      course: this.course,
     });
   }
 
@@ -118,7 +119,7 @@ export class ItemUpdateComponent implements OnInit {
       image: this.editForm.get(['image'])!.value,
       audioContentType: this.editForm.get(['audioContentType'])!.value,
       audio: this.editForm.get(['audio'])!.value,
-      course: this.editForm.get(['course'])!.value,
+      course: this.course ? this.course : undefined,
     };
   }
 

@@ -38,7 +38,7 @@
                 <h2 id="page-heading">
                     <span>Items</span>
             
-                    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-item" [routerLink]="['/item/new']">
+                    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-item" [routerLink]="['/course', course.id,'item','new']">
                         <fa-icon icon="plus"></fa-icon>
                         <span>
                         Create a new Item
@@ -129,7 +129,9 @@
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
             </button>
 
-            <!-- <jhi-item [courseId]="courseId"></jhi-item> -->
+            <button type="button" [routerLink]="['/course', course.id, 'learn']" class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Learn</span>
+            </button>
         </div>
     </div>
 </div>

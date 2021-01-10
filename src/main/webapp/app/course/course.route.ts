@@ -11,6 +11,9 @@ import { CourseService } from './course.service';
 import { CourseComponent } from './course.component';
 import { CourseDetailComponent } from './course-detail.component';
 import { CourseUpdateComponent } from './course-update.component';
+import { LearningComponent } from './learning/learning.component';
+import { ItemResolve } from './item/item.route';
+import { ItemUpdateComponent } from './item/item-update.component';
 
 @Injectable({ providedIn: 'root' })
 export class CourseResolve implements Resolve<ICourse> {
@@ -77,6 +80,30 @@ export const courseRoute: Routes = [
     data: {
       authorities: [Authority.USER],
       pageTitle: 'Courses',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/learn',
+    component: LearningComponent,
+    resolve: {
+      course: CourseResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'Learn',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/item/new',
+    component: ItemUpdateComponent,
+    resolve: {
+      item: ItemResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'Items',
     },
     canActivate: [UserRouteAccessService],
   },
