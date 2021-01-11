@@ -11,6 +11,7 @@ import { ItemService } from './item.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { ICourse } from 'app/shared/model/course.model';
 import { CourseService } from 'app/course/course.service';
+import { createWriteStream } from 'fs';
 
 @Component({
   selector: 'jhi-item-update',
@@ -45,10 +46,17 @@ export class ItemUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.createItem();
+  }
+
+  // tslint:disable-next-line: typedef
+  createItem() {
     this.activatedRoute.data.subscribe(({ item }) => {
-      this.updateForm(item);
-      this.courseId = item.id;
-      this.courseService.find(item.id).subscribe((res: HttpResponse<ICourse>) => (this.course = res.body));
+      // eslint-disable-next-line no-console
+      console.log('item', item);
+      this.updateForm(new Item());
+      this.courseId = item.course.id;
+      this.courseService.find(Number(this.courseId)).subscribe((res: HttpResponse<ICourse>) => (this.course = res.body));
     });
   }
 
