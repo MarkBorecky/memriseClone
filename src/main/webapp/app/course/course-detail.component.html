@@ -37,7 +37,7 @@
             <div>
                 <h2 id="page-heading">
                     <span>Items</span>
-            
+
                     <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-item" [routerLink]="['/item/new']">
                         <fa-icon icon="plus"></fa-icon>
                         <span>
@@ -45,15 +45,15 @@
                         </span>
                     </button>
                 </h2>
-            
+
                 <jhi-alert-error></jhi-alert-error>
-            
+
                 <jhi-alert></jhi-alert>
-            
+
                 <div class="alert alert-warning" id="no-result" *ngIf="items?.length === 0">
                     <span>No items found</span>
                 </div>
-            
+
                 <div class="table-responsive" id="entities" *ngIf="items && items.length > 0">
                     <table class="table table-striped" aria-describedby="page-heading">
                         <thead>
@@ -99,14 +99,14 @@
                                             <fa-icon icon="eye"></fa-icon>
                                             <span class="d-none d-md-inline">View</span>
                                         </button>
-            
+
                                         <button type="submit"
                                                 [routerLink]="['/item', item.id, 'edit']"
                                                 class="btn btn-primary btn-sm">
                                             <fa-icon icon="pencil-alt"></fa-icon>
                                             <span class="d-none d-md-inline">Edit</span>
                                         </button>
-            
+
                                         <button type="submit" (click)="delete(item)"
                                                 class="btn btn-danger btn-sm">
                                             <fa-icon icon="times"></fa-icon>
@@ -119,7 +119,7 @@
                     </table>
                 </div>
             </div>
-            
+
 
             <button type="submit" (click)="previousState()" class="btn btn-info">
                 <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
