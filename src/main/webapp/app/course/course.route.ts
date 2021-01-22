@@ -11,15 +11,23 @@ import { CourseService } from './course.service';
 import { CourseComponent } from './course.component';
 import { CourseDetailComponent } from './course-detail.component';
 import { CourseUpdateComponent } from './course-update.component';
+import { ItemUpdateComponent } from './item/item-update.component';
+import { ItemResolve } from './item/item.route';
+import { ItemDetailComponent } from './item/item-detail.component';
+import { ItemService } from './item/item.service';
 
 @Injectable({ providedIn: 'root' })
 export class CourseResolve implements Resolve<ICourse> {
-  constructor(private service: CourseService, private router: Router) {}
+  constructor(private courseService: CourseService, private itemService: ItemService, private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<ICourse> | Observable<never> {
+    // eslint-disable-next-line no-console
+    console.log('CourseResolve');
+    // eslint-disable-next-line no-console
+    console.log('params', route.params);
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(
+      return this.courseService.find(id).pipe(
         flatMap((course: HttpResponse<Course>) => {
           if (course.body) {
             return of(course.body);
@@ -65,6 +73,45 @@ export const courseRoute: Routes = [
     data: {
       authorities: [Authority.USER],
       pageTitle: 'Courses',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    // /course/1/view/course/item/new
+    path: ':id/view/course/item/new',
+    component: ItemUpdateComponent,
+    resolve: {
+      course: CourseResolve,
+      item: ItemResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'Items',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'item/:itemId/view',
+    component: ItemDetailComponent,
+    resolve: {
+      course: CourseResolve,
+      item: ItemResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'Items',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'item/:itemId/edit',
+    component: ItemUpdateComponent,
+    resolve: {
+      item: ItemResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'Items',
     },
     canActivate: [UserRouteAccessService],
   },

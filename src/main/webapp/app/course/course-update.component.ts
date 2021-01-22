@@ -38,6 +38,8 @@ export class CourseUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // eslint-disable-next-line no-console
+    console.log('this.activatedRoute.data', this.activatedRoute.data);
     this.activatedRoute.data.subscribe(({ course }) => {
       this.updateForm(course);
       this.accountService.getAuthenticationState().subscribe(account => (this.login = account?.login));

@@ -16,9 +16,13 @@ export class ItemResolve implements Resolve<IItem> {
   constructor(private service: ItemService, private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IItem> | Observable<never> {
-    const id = route.params['id'];
-    if (id) {
-      return this.service.find(id).pipe(
+    // eslint-disable-next-line no-console
+    console.log('ItemResolve');
+    // eslint-disable-next-line no-console
+    console.log('route.params', route.params);
+    const itemId = route.params['itemId'];
+    if (itemId) {
+      return this.service.find(itemId).pipe(
         flatMap((item: HttpResponse<Item>) => {
           if (item.body) {
             return of(item.body);
@@ -35,7 +39,7 @@ export class ItemResolve implements Resolve<IItem> {
 
 export const itemRoute: Routes = [
   {
-    path: ':id/view',
+    path: ':itemId/view',
     component: ItemDetailComponent,
     resolve: {
       item: ItemResolve,
@@ -59,7 +63,20 @@ export const itemRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: ':id/edit',
+    // /course/1/view/course/item/new
+    path: ':itemId/view/course/item/new',
+    component: ItemUpdateComponent,
+    resolve: {
+      course: ItemResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'Courses',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':itemId/edit',
     component: ItemUpdateComponent,
     resolve: {
       item: ItemResolve,
