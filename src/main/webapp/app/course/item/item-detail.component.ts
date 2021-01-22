@@ -14,6 +14,8 @@ export class ItemDetailComponent implements OnInit {
   constructor(protected dataUtils: JhiDataUtils, protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    // eslint-disable-next-line no-console
+    console.log('this.activatedRoute.data', this.activatedRoute.data);
     this.activatedRoute.data.subscribe(({ item }) => (this.item = item));
   }
 

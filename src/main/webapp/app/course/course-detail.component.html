@@ -37,8 +37,7 @@
             <div>
                 <h2 id="page-heading">
                     <span>Items</span>
-            
-                    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-item" [routerLink]="['/item/new']">
+                    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-item" [routerLink]="['course/item/new']">
                         <fa-icon icon="plus"></fa-icon>
                         <span>
                         Create a new Item
@@ -94,14 +93,14 @@
                                 <td class="text-right">
                                     <div class="btn-group">
                                         <button type="submit"
-                                                [routerLink]="['/item', item.id, 'view']"
+                                                [routerLink]="['/course/item', item.id, 'view']"
                                                 class="btn btn-info btn-sm">
                                             <fa-icon icon="eye"></fa-icon>
                                             <span class="d-none d-md-inline">View</span>
                                         </button>
             
                                         <button type="submit"
-                                                [routerLink]="['/item', item.id, 'edit']"
+                                                [routerLink]="['/course/item', item.id, 'edit']"
                                                 class="btn btn-primary btn-sm">
                                             <fa-icon icon="pencil-alt"></fa-icon>
                                             <span class="d-none d-md-inline">Edit</span>
@@ -129,7 +128,9 @@
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
             </button>
 
-            <!-- <jhi-item [courseId]="courseId"></jhi-item> -->
+            <button type="button" [routerLink]="['/course', course.id, 'learn']" class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Learn</span>
+            </button>
         </div>
     </div>
 </div>

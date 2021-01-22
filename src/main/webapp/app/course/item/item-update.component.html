@@ -1,16 +1,17 @@
 <div class="row justify-content-center">
     <div class="col-8">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+        <form name="editForm" role="form" (ngSubmit)="save()" [formGroup]="editForm">
             <h2 id="jhi-item-heading">Create or edit a Item</h2>
-
             <div>
                 <jhi-alert-error></jhi-alert-error>
-
+<<<<<<< HEAD
+                <h3>Course: {{course?.name}}</h3>
+=======
+>>>>>>> MarekBorecki
                 <div class="form-group" [hidden]="!editForm.get('id')!.value">
                     <label for="id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                 </div>
-
                 <div class="form-group">
                     <label class="form-control-label" for="field_word">Word</label>
                     <input type="text" class="form-control" name="word" id="field_word"
@@ -22,7 +23,6 @@
                         </small>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="form-control-label" for="field_translation">Translation</label>
                     <input type="text" class="form-control" name="translation" id="field_translation"
@@ -34,19 +34,16 @@
                         </small>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="form-control-label" for="field_exampleSentence">Example Sentence</label>
                     <input type="text" class="form-control" name="exampleSentence" id="field_exampleSentence"
                            formControlName="exampleSentence"/>
                 </div>
-
                 <div class="form-group">
                     <label class="form-control-label" for="field_translationExampleSentence">Translation Example Sentence</label>
                     <input type="text" class="form-control" name="translationExampleSentence" id="field_translationExampleSentence"
                            formControlName="translationExampleSentence"/>
                 </div>
-
                 <div class="form-group">
                     <label class="form-control-label" for="field_image">Image</label>
                     <div>
@@ -64,7 +61,6 @@
                     <input type="hidden" class="form-control" name="imageContentType" id="field_imageContentType"
                            formControlName="imageContentType" />
                 </div>
-
                 <div class="form-group">
                     <label class="form-control-label" for="field_audio">Audio</label>
                     <div>
@@ -83,21 +79,11 @@
                     <input type="hidden" class="form-control" name="audioContentType" id="field_audioContentType"
                            formControlName="audioContentType" />
                 </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" for="field_course">Course</label>
-                    <select class="form-control" id="field_course" name="course" formControlName="course">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="courseOption.id === editForm.get('course')!.value?.id ? editForm.get('course')!.value : courseOption" *ngFor="let courseOption of courses; trackBy: trackById">{{ courseOption.name }}</option>
-                    </select>
-                </div>
             </div>
-
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
                     <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
                 </button>
-
                 <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
                     <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
                 </button>

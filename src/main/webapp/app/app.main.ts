@@ -10,7 +10,7 @@ if (module['hot']) {
 }
 
 platformBrowserDynamic()
-  .bootstrapModule(MemriseCloneAppModule, { preserveWhitespaces: true })
+  .bootstrapModule(MemriseCloneAppModule, { preserveWhitespaces: false })
   // eslint-disable-next-line no-console
   .then(() => console.log('Application started'))
   .catch(err => console.error(err));
