@@ -11,6 +11,7 @@ import { ItemService } from './item.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { ICourse } from 'app/shared/model/course.model';
 import { CourseService } from 'app/course/course.service';
+import { createWriteStream } from 'fs';
 
 @Component({
   selector: 'jhi-item-update',
@@ -18,7 +19,7 @@ import { CourseService } from 'app/course/course.service';
 })
 export class ItemUpdateComponent implements OnInit {
   isSaving = false;
-  courses: ICourse[] = [];
+  course: ICourse | undefined = undefined;
 
   editForm = this.fb.group({
     id: [],
@@ -44,10 +45,11 @@ export class ItemUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ item }) => {
+    // eslint-disable-next-line no-console
+    console.log('this.activatedRoute.data', this.activatedRoute.data);
+    this.activatedRoute.data.subscribe(({ item, course }) => {
+      this.course = course;
       this.updateForm(item);
-
-      this.courseService.query().subscribe((res: HttpResponse<ICourse[]>) => (this.courses = res.body || []));
     });
   }
 
@@ -62,7 +64,7 @@ export class ItemUpdateComponent implements OnInit {
       imageContentType: item.imageContentType,
       audio: item.audio,
       audioContentType: item.audioContentType,
-      course: item.course,
+      course: item.course ? item.course : this.course,
     });
   }
 
@@ -118,7 +120,7 @@ export class ItemUpdateComponent implements OnInit {
       image: this.editForm.get(['image'])!.value,
       audioContentType: this.editForm.get(['audioContentType'])!.value,
       audio: this.editForm.get(['audio'])!.value,
-      course: this.editForm.get(['course'])!.value,
+      course: this.editForm.get(['course'])!.value ? this.editForm.get(['course'])!.value : this.course,
     };
   }
 

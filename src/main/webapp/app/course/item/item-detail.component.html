@@ -26,16 +26,13 @@
                 </dd>
                 <dt><span>Image</span></dt>
                 <dd>
-                    <div *ngIf="item.image">
-                        <a (click)="openFile(item.imageContentType, item.image)">
-                            <img [src]="'data:' + item.imageContentType + ';base64,' + item.image" style="max-width: 100%;" alt="item image"/>
-                        </a>
-                        {{ item.imageContentType }}, {{ byteSize(item.image) }}
+                    <div *ngIf="item.image">                        
+                        <img [src]="'data:' + item.imageContentType + ';base64,' + item.image" style="max-width: 25%%;" alt="item image"/>                        
                     </div>
                 </dd>
                 <dt><span>Audio</span></dt>
                 <dd>
-                    <div *ngIf="item.audio">
+                    <div *ngIf="item.audio" >
                         <a (click)="openFile(item.audioContentType, item.audio)">open</a>
                         {{ item.audioContentType }}, {{ byteSize(item.audio) }}
                     </div>
@@ -43,7 +40,7 @@
                 <dt><span>Course</span></dt>
                 <dd>
                     <div *ngIf="item.course">
-                        <a [routerLink]="['/course', item.course?.id, 'view']">{{ item.course?.name }}</a>
+                        <p>{{ item.course?.name }}</p>
                     </div>
                 </dd>
             </dl>
