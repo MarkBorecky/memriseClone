@@ -10,6 +10,11 @@ import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { CourseService } from './course.service';
 import { CourseDeleteDialogComponent } from './course-delete-dialog.component';
 
+import { UserService } from 'app/core/user/user.service';
+import { AccountService } from 'app/core/auth/account.service';
+import { ActivatedRoute } from '@angular/router';
+import { IUser } from 'app/core/user/user.model';
+
 @Component({
   selector: 'jhi-course',
   templateUrl: './course.component.html',
@@ -22,8 +27,13 @@ export class CourseComponent implements OnInit, OnDestroy {
   page: number;
   predicate: string;
   ascending: boolean;
+  user: IUser | undefined = undefined;
+  login: string | undefined = '';
 
   constructor(
+    protected activatedRoute: ActivatedRoute,
+    protected accountService: AccountService,
+    protected userService: UserService,
     protected courseService: CourseService,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal,
@@ -63,6 +73,10 @@ export class CourseComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadAll();
     this.registerChangeInCourses();
+    this.activatedRoute.data.subscribe(({ course }) => {
+      this.accountService.getAuthenticationState().subscribe(account => (this.login = account?.login));
+      this.userService.find(this.login ? this.login : '').subscribe(res => (this.user = res || undefined));
+    });
   }
 
   ngOnDestroy(): void {

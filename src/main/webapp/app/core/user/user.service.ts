@@ -20,6 +20,10 @@ export class UserService {
     return this.http.put<IUser>(this.resourceUrl, user);
   }
 
+  getUserById(id: string): Observable<IUser> {
+    return this.http.get<IUser>(`${this.resourceUrl}/${id}`);
+  }
+
   find(login: string): Observable<IUser> {
     return this.http.get<IUser>(`${this.resourceUrl}/${login}`);
   }
