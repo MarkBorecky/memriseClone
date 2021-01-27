@@ -114,6 +114,17 @@ public class CourseResource {
     }
 
     /**
+     * {@code GET  /courses} : get the courses by login user.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the course, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/courses/user")
+    public ResponseEntity<List<Course>> getCoursesByUser() {
+        List<Course> courses = courseRepository.findByUserIsCurrentUser();
+        return ResponseEntity.ok().body(courses);
+    }
+
+    /**
      * {@code DELETE  /courses/:id} : delete the "id" course.
      *
      * @param id the id of the course to delete.

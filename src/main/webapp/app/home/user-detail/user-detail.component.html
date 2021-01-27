@@ -1,0 +1,18 @@
+<dl class="row-md jh-entity-details">
+    <dt><span>Name</span></dt>
+    <dd><span>{{ user?.firstName }} {{ user?.lastName }}</span></dd>
+    <dt><span>Courses</span></dt>
+    <dd><span>{{ coursesAmount }}</span></dd>
+</dl>
+
+<div *ngIf="courses && courses.length > 0">
+    <h1>Ahoj</h1>
+    <table class="table table-striped" aria-describedby="page-heading">
+        <tbody>
+            <tr *ngFor="let course of courses">
+                <td>{{ course.img }}</td>
+                <td>{{ course.name }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
