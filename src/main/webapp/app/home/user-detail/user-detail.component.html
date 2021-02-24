@@ -10,8 +10,7 @@
     <table class="table table-striped" aria-describedby="page-heading">
         <tbody>
             <tr *ngFor="let course of courses">
-                <td>{{ course.img }}</td>
-                <td>{{ course.name }}</td>
+                <td>{{ course?.name }}</td>
             </tr>
         </tbody>
     </table>

@@ -1,0 +1,67 @@
+.progressBar {
+  height: 2rem;
+  width: 100%;
+  background: green;
+  border-radius: 1rem;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.progressFrame {
+  height: 2rem;
+  width: 100%;
+  background: rgb(220, 220, 220);
+  border-radius: 1rem;
+  box-sizing: border-box;
+}
+
+.percent {
+  text-align: center;
+  padding: 0.2rem;
+  position: absolute;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.correct {
+  background-color: seagreen;
+}
+
+.incorrect {
+  background-color: palevioletred;
+}
+
+.question {
+  margin: 2rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.tile {
+  text-align: center;
+  font-weight: bold;
+  display: block;
+  margin: 1rem;
+  padding: 1rem;
+  font-size: 2rem;
+  background-color: rgb(220, 220, 220);
+  min-width: 300px;
+  max-width: 49%;
+  float: left;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  position: relative;
+}
+
+.tile:hover {
+  cursor: pointer;
+}
+
+.idx {
+  margin: 0.3rem;
+  padding: 0.1rem;
+  border-radius: 50%;
+  font-size: 1rem;
+  position: absolute;
+}

@@ -1,7 +1,23 @@
 <div>
-    <h1>Learning</h1>
-    <h3>question</h3>
-    <input [(ngModel)]="res" placeholder="type answer" />
-    <button (click)="next()">></button>
-    <h5>res => {{val}}</h5>
+    <div class="progressFrame">
+        <div class="progressBar" [style.width.%]="progress"></div>
+    </div>
+    <h2 class="question">{{ question }}</h2>
+    <div *ngIf="questionType === 'string'">
+        <input [(ngModel)]="answer" placeholder="type answer" />
+        <button (click)="next()">></button>
+    </div>
+    <div *ngIf="questionType === 'tiles'" class="row">
+        <div *ngFor="let tile of tiles; let i = index" class="col-6 col-md-12 tile" (click)="chooseAnwser(tile)"
+            [style.background-color]="showAnswer ? tile == correctAnswer ? 'green' : selected === tile ? 'red' : '' : ''">
+            <div class="idx">{{i + 1}}</div>
+            {{ tile }}
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div *ngIf="complete">
+        <h1>Congratulations!</h1>
+        <p>Your result:</p>
+        <p>{{ result }} %</p>
+    </div>
 </div>
