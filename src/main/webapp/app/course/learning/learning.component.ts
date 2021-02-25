@@ -1,13 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { IItem } from 'app/shared/model/item.model';
 import { Question } from 'app/shared/model/question.model';
 import { timer } from 'rxjs';
+import { ItemService } from '../item/item.service';
 
 @Component({
   selector: 'jhi-learning',
   templateUrl: './learning.component.html',
   styleUrls: ['learning.scss'],
 })
-export class LearningComponent implements OnInit, OnDestroy {
+export class LearningComponent implements OnInit {
   question: string | undefined = undefined;
   answer = 'odp';
   questionType: string | undefined = undefined;
@@ -16,6 +19,8 @@ export class LearningComponent implements OnInit, OnDestroy {
   showAnswer = false;
   selected = '';
   questions: Question[] = [];
+  items: IItem[] = [];
+  questionsNumber = 5;
   questionItem: Question | undefined = undefined;
   questionAmount: number | undefined = undefined;
   correctAnswerAmount = 0;
@@ -23,6 +28,53 @@ export class LearningComponent implements OnInit, OnDestroy {
   answerCounter = 0;
   result = 0;
   complete = false;
+  promptAnswerTable: string[] | undefined = undefined;
+  courseId: number | undefined = undefined;
+  userId: number | undefined = undefined;
+
+  constructor(
+    protected itemService: ItemService,
+    protected activatedRoute: ActivatedRoute,
+  ) {
+    this.activatedRoute.data.subscribe(({ course }) => {
+      this.itemService.findByCourseId(course.id).subscribe(res => {
+        this.items = res.body || [];
+        this.ngOnInit();
+      })
+    });
+  }
+
+  ngOnInit(): void {
+    // eslint-disable-next-line no-console
+    console.log('on init');
+    // eslint-disable-next-line no-console
+    console.log('itemService ->', this.items);
+    const ansers = this.items.length >= 4 ? 4 : this.items.length;
+    this.promptAnswerTable = this.getPromptAnswers(this.items, ansers);
+
+    this.questions = [];
+    if (this.items.length >= this.questionsNumber) {
+      for (let i = 0; i < this.questionsNumber; i++) {
+        this.questions.push(new Question('tiles', this.items[i].word, this.items[i].translation, this.promptAnswerTable))
+      }
+    } else {
+      for (let i = 0; i < this.items.length; i++) {
+        this.questions.push(new Question('tiles', this.items[i].word, this.items[i].translation, this.promptAnswerTable))
+      }
+    }
+    // eslint-disable-next-line no-console
+    console.log('this.questions', this.questions);
+    this.questionAmount = this.questions.length;
+    this.next();
+  }
+
+  getPromptAnswers(items: IItem[], howMany: number): string[] {
+    const strings: string[] = [];
+    for (let i = 0; i < howMany; i++) {
+      strings.push(items[i].translation || '')
+    }
+    return strings;
+  }
 
   public next(): void {
     if (this.questions.length > 0) {
@@ -39,17 +91,6 @@ export class LearningComponent implements OnInit, OnDestroy {
       this.result = (this.questionAmount / this.answerCounter) * 100;
     }
   }
-
-  ngOnInit(): void {
-    this.questions.push(new Question('tiles', 'pies', 'dog', ['cat', 'parrot', 'dog', 'giraffe']));
-    this.questions.push(new Question('tiles', 'kot', 'cat', ['parrot', 'dog', 'giraffe', 'cat']));
-    this.questions.push(new Question('tiles', 'kura', 'hen', ['cat', 'parrot', 'dog', 'hen']));
-    this.questions.push(new Question('tiles', 'krokodyl', 'crocodile', ['cat', 'crocodile', 'dog', 'giraffe']));
-    this.questionAmount = this.questions.length;
-    this.next();
-  }
-
-  ngOnDestroy(): void {}
 
   chooseAnwser(answer: string): void {
     this.answerCounter++;
