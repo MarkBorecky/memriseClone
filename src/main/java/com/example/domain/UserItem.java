@@ -39,13 +39,25 @@ public class UserItem implements Serializable {
     @Column(name = "planned_reminder")
     private LocalDate plannedReminder;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
+    @JsonIgnoreProperties(value = "userItems", allowSetters = true)
     private Item item;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "userItems", allowSetters = true)
     private User user;
+
+    public UserItem() {
+    }
+
+    public UserItem(Item item, User user) {
+        this.id = System.currentTimeMillis();
+        this.learned = false;
+        this.correctAnswers = 0;
+        this.wrongAnswers = 0;
+        this.item = item;
+        this.user = user;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
