@@ -2,6 +2,7 @@ package com.example.web.rest;
 
 import com.example.domain.UserItem;
 import com.example.repository.UserItemRepository;
+import com.example.service.UserCourseService;
 import com.example.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -35,16 +36,23 @@ public class UserItemResource {
     private String applicationName;
 
     private final UserItemRepository userItemRepository;
+    private final UserCourseService userCourseService;
 
-    public UserItemResource(UserItemRepository userItemRepository) {
+    public UserItemResource(
+        UserItemRepository userItemRepository,
+        UserCourseService userCourseService
+    ) {
         this.userItemRepository = userItemRepository;
+        this.userCourseService = userCourseService;
     }
 
     /**
      * {@code POST  /user-items} : Create a new userItem.
      *
      * @param userItem the userItem to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new userItem, or with status {@code 400 (Bad Request)} if the userItem has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new userItem, or with status {@code 400 (Bad Request)} if
+     *         the userItem has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/user-items")
@@ -54,8 +62,9 @@ public class UserItemResource {
             throw new BadRequestAlertException("A new userItem cannot already have an ID", ENTITY_NAME, "idexists");
         }
         UserItem result = userItemRepository.save(userItem);
-        return ResponseEntity.created(new URI("/api/user-items/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+        return ResponseEntity
+            .created(new URI("/api/user-items/" + result.getId())).headers(HeaderUtil
+                .createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -63,9 +72,11 @@ public class UserItemResource {
      * {@code PUT  /user-items} : Updates an existing userItem.
      *
      * @param userItem the userItem to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated userItem,
-     * or with status {@code 400 (Bad Request)} if the userItem is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the userItem couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated userItem, or with status {@code 400 (Bad Request)} if the
+     *         userItem is not valid, or with status
+     *         {@code 500 (Internal Server Error)} if the userItem couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/user-items")
@@ -75,15 +86,22 @@ public class UserItemResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         UserItem result = userItemRepository.save(userItem);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, userItem.getId().toString()))
+        return ResponseEntity.ok().headers(
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, userItem.getId().toString()))
             .body(result);
     }
+
+    @PutMapping("/user-items-many")
+    public void updateUserItems(@Valid @RequestBody List<UserItem> userItems) {
+        userItemRepository.saveAll(userItems);
+    }
+
 
     /**
      * {@code GET  /user-items} : get all the userItems.
      *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userItems in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of userItems in body.
      */
     @GetMapping("/user-items")
     public List<UserItem> getAllUserItems() {
@@ -95,7 +113,8 @@ public class UserItemResource {
      * {@code GET  /user-items/:id} : get the "id" userItem.
      *
      * @param id the id of the userItem to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the userItem, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the userItem, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/user-items/{id}")
     public ResponseEntity<UserItem> getUserItem(@PathVariable Long id) {
@@ -114,6 +133,27 @@ public class UserItemResource {
     public ResponseEntity<Void> deleteUserItem(@PathVariable Long id) {
         log.debug("REST request to delete UserItem : {}", id);
         userItemRepository.deleteById(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .build();
+    }
+
+    @GetMapping("/user-items/by-user-and-course/{courseId}")
+    public List<UserItem> getUserItems(
+        @PathVariable Long courseId,
+        @RequestParam(defaultValue = "true") boolean learningSession
+    ) {
+        userCourseService.startLearning(courseId);
+        if (learningSession) {
+            return userItemRepository.getItemsForLearning(courseId);
+        } else {
+            return userItemRepository.getItemsForRemembering(courseId);
+        }
+    }
+
+    @GetMapping("/user-items/by-user-and-course-all/{courseId}")
+    public List<UserItem> getAllUserItems(@PathVariable Long courseId) {
+        userCourseService.startLearning(courseId);
+        return userItemRepository.getItems(courseId);
     }
 }
