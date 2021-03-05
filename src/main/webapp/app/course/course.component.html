@@ -21,53 +21,39 @@
     <div class="table-responsive" id="entities" *ngIf="courses && courses.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="reset.bind(this)">
-                    <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="learningLanguage"><span>Learning Language</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="baseLanguage"><span>Base Language</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="user.id"><span>User</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"></th>
-                </tr>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="reset.bind(this)">
+                <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+                <th scope="col"  jhiSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
+                <th scope="col"  jhiSortBy="learningLanguage"><span>Learning Language</span> <fa-icon icon="sort"></fa-icon></th>
+                <th scope="col"  jhiSortBy="baseLanguage"><span>Base Language</span> <fa-icon icon="sort"></fa-icon></th>
+                <th scope="col"  jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
+                <th scope="col"  jhiSortBy="user.id"><span>User</span> <fa-icon icon="sort"></fa-icon></th>
+                <th scope="col"></th>
+            </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
-                <tr *ngFor="let course of courses ;trackBy: trackId">
-                    <td><a [routerLink]="['/course', course.id, 'view']">{{ course.id }}</a></td>
-                    <td>{{ course.name }}</td>
-                    <td>{{ course.learningLanguage }}</td>
-                    <td>{{ course.baseLanguage }}</td>
-                    <td>{{ course.description }}</td>
-                    <td>
-                        {{ course.user?.id }}
-                    </td>
-                    <td class="text-right">
-                        <div class="btn-group">
-                            <button type="submit"
-                                    [routerLink]="['/course', course.id, 'view']"
-                                    class="btn btn-info btn-sm">
-                                <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline">View</span>
-                            </button>
-
-                            <div *ngIf="course.user?.id === user?.id;">
-                            <button  type="submit"
-                                    [routerLink]="['/course', course.id, 'edit']"
-                                    class="btn btn-primary btn-sm">
-                                <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline">Edit</span>
-                            </button>
-                            </div>
-
-                            <button type="submit" (click)="delete(course)"
-                                    class="btn btn-danger btn-sm">
-                                <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline">Delete</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+            <tr *ngFor="let course of courses ;trackBy: trackId">
+                <td><a [routerLink]="['/course', course.id, 'view']">{{ course.id }}</a></td>
+                <td>{{ course.name }}</td>
+                <td>{{ course.learningLanguage }}</td>
+                <td>{{ course.baseLanguage }}</td>
+                <td>{{ course.description }}</td>
+                <td>
+                    {{ course.user?.id }}
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/course', course.id, 'view']"
+                                class="btn btn-info btn-sm">
+                            <fa-icon icon="eye"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
 </div>
+
