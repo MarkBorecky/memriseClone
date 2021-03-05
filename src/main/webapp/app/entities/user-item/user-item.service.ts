@@ -76,4 +76,9 @@ export class UserItemService {
     }
     return res;
   }
+  findByCourseIdAll(courseId: number | undefined): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<IUserItem[]>(this.resourceUrl + '/by-user-and-course/' + courseId, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
 }
