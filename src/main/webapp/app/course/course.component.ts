@@ -73,10 +73,10 @@ export class CourseComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadAll();
     this.registerChangeInCourses();
-    this.activatedRoute.data.subscribe(({ course }) => {
-      this.accountService.getAuthenticationState().subscribe(account => (this.login = account?.login));
-      this.userService.find(this.login ? this.login : '').subscribe(res => (this.user = res || undefined));
-    });
+    // this.activatedRoute.data.subscribe(({ course }) => {
+    this.accountService.getAuthenticationState().subscribe(account => (this.login = account?.login));
+    this.userService.find(this.login ? this.login : '').subscribe(res => (this.user = res || undefined));
+    // });
   }
 
   ngOnDestroy(): void {

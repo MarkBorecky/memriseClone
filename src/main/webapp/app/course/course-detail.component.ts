@@ -4,13 +4,13 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ICourse } from 'app/shared/model/course.model';
 import { JhiDataUtils, JhiEventManager } from 'ng-jhipster';
-import { ItemService } from './item/item.service';
 
 import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-
-import { IItem } from 'app/shared/model/item.model';
 import { ItemDeleteDialogComponent } from './item/item-delete-dialog.component';
+import { UserItemService } from 'app/entities/user-item/user-item.service';
+import { IUserItem } from 'app/shared/model/user-item.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'jhi-course-detail',
@@ -18,19 +18,22 @@ import { ItemDeleteDialogComponent } from './item/item-delete-dialog.component';
 })
 export class CourseDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   course: ICourse | null = null;
-  items?: IItem[];
+  userItems?: IUserItem[];
   eventSubscriber?: Subscription;
+  userId: number | null = null;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
-    protected itemService: ItemService,
+    protected userItemService: UserItemService,
     protected dataUtils: JhiDataUtils,
     protected eventManager: JhiEventManager,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ course }) => (this.course = course));
+    this.accountService.getAuthenticationState().subscribe(account => (this.userId = Number(account?.id)));
   }
 
   ngAfterViewInit(): void {
@@ -44,7 +47,11 @@ export class CourseDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     window.history.back();
   }
   loadAll(courseId: number | undefined): void {
-    this.itemService.findByCourseId(courseId).subscribe((res: HttpResponse<IItem[]>) => (this.items = res.body || []));
+    this.userItemService.findByCourseIdAll(courseId).subscribe((res: HttpResponse<IUserItem[]>) => {
+      this.userItems = res.body || [];
+      // eslint-disable-next-line no-console
+      console.log('items', this.userItems);
+    });
   }
 
   ngOnDestroy(): void {
@@ -53,8 +60,16 @@ export class CourseDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  trackId(index: number, item: IItem): number {
-    return item.id!;
+  // trackId(index: number, item: IUserItem): number {
+  //   return item.id!;
+  // }
+
+  isLernt(correctAnswers: number | undefined): boolean {
+    if (correctAnswers === undefined || correctAnswers < 3) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   byteSize(base64String: string): string {
@@ -69,8 +84,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.eventSubscriber = this.eventManager.subscribe('itemListModification', () => this.loadAll(this.course?.id));
   }
 
-  delete(item: IItem): void {
+  delete(userItem: IUserItem): void {
     const modalRef = this.modalService.open(ItemDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.item = item;
+    modalRef.componentInstance.item = userItem.item;
   }
 }
