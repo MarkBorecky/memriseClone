@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserItemService } from 'app/entities/user-item/user-item.service';
 import { IItem } from 'app/shared/model/item.model';
 import { Question } from 'app/shared/model/question.model';
+import { IUserItem } from 'app/shared/model/user-item.model';
 import { timer } from 'rxjs';
-import { ItemService } from '../item/item.service';
 
 @Component({
   selector: 'jhi-learning',
@@ -20,6 +21,7 @@ export class LearningComponent implements OnInit {
   selected = '';
   questions: Question[] = [];
   items: IItem[] = [];
+  iUserItems: IUserItem[] = [];
   questionsNumber = 5;
   questionItem: Question | undefined = undefined;
   questionAmount: number | undefined = undefined;
@@ -31,16 +33,15 @@ export class LearningComponent implements OnInit {
   promptAnswerTable: string[] | undefined = undefined;
   courseId: number | undefined = undefined;
   userId: number | undefined = undefined;
+  promptsOrderAsc = true;
 
-  constructor(
-    protected itemService: ItemService,
-    protected activatedRoute: ActivatedRoute,
-  ) {
+  constructor(protected userItemService: UserItemService, protected activatedRoute: ActivatedRoute, protected router: Router) {
     this.activatedRoute.data.subscribe(({ course }) => {
-      this.itemService.findByCourseId(course.id).subscribe(res => {
-        this.items = res.body || [];
+      this.courseId = course.id;
+      this.userItemService.findByCourseId(course.id).subscribe(res => {
+        this.iUserItems = res.body || [];
         this.ngOnInit();
-      })
+      });
     });
   }
 
@@ -49,17 +50,41 @@ export class LearningComponent implements OnInit {
     console.log('on init');
     // eslint-disable-next-line no-console
     console.log('itemService ->', this.items);
-    const ansers = this.items.length >= 4 ? 4 : this.items.length;
-    this.promptAnswerTable = this.getPromptAnswers(this.items, ansers);
+    const ansers = this.iUserItems.length >= 4 ? 4 : this.iUserItems.length;
+    this.promptAnswerTable = this.getPromptAnswers(this.iUserItems, ansers);
 
     this.questions = [];
-    if (this.items.length >= this.questionsNumber) {
+    if (this.iUserItems.length >= this.questionsNumber) {
       for (let i = 0; i < this.questionsNumber; i++) {
-        this.questions.push(new Question('tiles', this.items[i].word, this.items[i].translation, this.promptAnswerTable))
+        const word = this.iUserItems[i]?.item?.word;
+        const translation = this.iUserItems[i]?.item?.translation || '';
+        const prompts = this.promptAnswerTable;
+        if (!prompts.includes(translation)) {
+          prompts.pop();
+          prompts.push(translation);
+          prompts.sort();
+          if (this.promptsOrderAsc) {
+            prompts.reverse();
+            this.promptsOrderAsc = !this.promptsOrderAsc;
+          }
+        }
+        this.questions.push(new Question('tiles', word, translation, prompts));
       }
     } else {
-      for (let i = 0; i < this.items.length; i++) {
-        this.questions.push(new Question('tiles', this.items[i].word, this.items[i].translation, this.promptAnswerTable))
+      for (let i = 0; i < this.iUserItems.length; i++) {
+        const word = this.iUserItems[i].item?.word;
+        const translation = this.iUserItems[i].item?.translation || '';
+        const prompts = this.promptAnswerTable;
+        if (!prompts.includes(translation)) {
+          prompts.pop();
+          prompts.push(translation);
+          prompts.sort();
+          if (this.promptsOrderAsc) {
+            prompts.reverse();
+            this.promptsOrderAsc = !this.promptsOrderAsc;
+          }
+        }
+        this.questions.push(new Question('tiles', word, translation, prompts));
       }
     }
     // eslint-disable-next-line no-console
@@ -68,10 +93,10 @@ export class LearningComponent implements OnInit {
     this.next();
   }
 
-  getPromptAnswers(items: IItem[], howMany: number): string[] {
+  getPromptAnswers(iUserItems: IUserItem[], howMany: number): string[] {
     const strings: string[] = [];
     for (let i = 0; i < howMany; i++) {
-      strings.push(items[i].translation || '')
+      strings.push(iUserItems[i].item?.translation || '');
     }
     return strings;
   }
@@ -89,6 +114,9 @@ export class LearningComponent implements OnInit {
       this.questionType = '';
       this.question = '';
       this.result = (this.questionAmount / this.answerCounter) * 100;
+      timer(2000).subscribe(() => {
+        this.router.navigate(['course', this.courseId, 'view']);
+      });
     }
   }
 
@@ -100,13 +128,34 @@ export class LearningComponent implements OnInit {
       this.correctAnswerAmount++;
       this.progress = (this.correctAnswerAmount / this.questionAmount) * 100;
     }
+    const iuitem = this.findIUserItem(this.questionItem);
+
     timer(2000).subscribe(x => {
       if (this.correctAnswer === answer) {
+        // if (iuitem !== undefined) {
+        const correctAnswers = iuitem?.correctAnswers ? iuitem?.correctAnswers : 1;
+        iuitem.correctAnswers = correctAnswers;
+        if (correctAnswers >= 3) {
+          iuitem.learned = true;
+        }
+        // }
         this.next();
       } else if (this.questionItem) {
+        const wrongAnswers = iuitem?.wrongAnswers ? iuitem?.wrongAnswers : 1;
+        iuitem.wrongAnswers = wrongAnswers;
         this.questions.push(this.questionItem);
         this.next();
       }
+      // eslint-disable-next-line no-console
+      console.log('update', iuitem);
+      this.userItemService.update(iuitem).subscribe(res => {
+        // eslint-disable-next-line no-console
+        console.log('res', res);
+      });
     });
+  }
+
+  findIUserItem(questionItem: Question | undefined): IUserItem {
+    return this.iUserItems.filter(iui => iui?.item?.word === questionItem?.question)[0];
   }
 }

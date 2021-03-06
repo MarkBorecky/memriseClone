@@ -45,6 +45,12 @@ export class UserItemService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
+  findByCourseId(id: any): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<IUserItem[]>(this.resourceUrl + '/by-user-and-course-all/' + id, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
