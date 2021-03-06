@@ -47,7 +47,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     window.history.back();
   }
   loadAll(courseId: number | undefined): void {
-    this.userItemService.findByCourseIdAll(courseId).subscribe((res: HttpResponse<IUserItem[]>) => {
+    this.userItemService.findByCourseId(courseId).subscribe((res: HttpResponse<IUserItem[]>) => {
       this.userItems = res.body || [];
       // eslint-disable-next-line no-console
       console.log('items', this.userItems);

@@ -33,7 +33,6 @@ export class LearningComponent implements OnInit {
   promptAnswerTable: string[] | undefined = undefined;
   courseId: number | undefined = undefined;
   userId: number | undefined = undefined;
-  promptsOrderAsc = true;
 
   constructor(protected userItemService: UserItemService, protected activatedRoute: ActivatedRoute, protected router: Router) {
     this.activatedRoute.data.subscribe(({ course }) => {
@@ -49,7 +48,10 @@ export class LearningComponent implements OnInit {
     // eslint-disable-next-line no-console
     console.log('on init');
     // eslint-disable-next-line no-console
-    console.log('itemService ->', this.items);
+    console.log('itemService ->', this.iUserItems);
+    this.iUserItems = this.iUserItems.filter(item => item.learned === false);
+    // eslint-disable-next-line no-console
+    console.log('after filter ->', this.iUserItems);
     const ansers = this.iUserItems.length >= 4 ? 4 : this.iUserItems.length;
     this.promptAnswerTable = this.getPromptAnswers(this.iUserItems, ansers);
 
@@ -59,15 +61,6 @@ export class LearningComponent implements OnInit {
         const word = this.iUserItems[i]?.item?.word;
         const translation = this.iUserItems[i]?.item?.translation || '';
         const prompts = this.promptAnswerTable;
-        if (!prompts.includes(translation)) {
-          prompts.pop();
-          prompts.push(translation);
-          prompts.sort();
-          if (this.promptsOrderAsc) {
-            prompts.reverse();
-            this.promptsOrderAsc = !this.promptsOrderAsc;
-          }
-        }
         this.questions.push(new Question('tiles', word, translation, prompts));
       }
     } else {
@@ -75,20 +68,10 @@ export class LearningComponent implements OnInit {
         const word = this.iUserItems[i].item?.word;
         const translation = this.iUserItems[i].item?.translation || '';
         const prompts = this.promptAnswerTable;
-        if (!prompts.includes(translation)) {
-          prompts.pop();
-          prompts.push(translation);
-          prompts.sort();
-          if (this.promptsOrderAsc) {
-            prompts.reverse();
-            this.promptsOrderAsc = !this.promptsOrderAsc;
-          }
-        }
         this.questions.push(new Question('tiles', word, translation, prompts));
       }
     }
-    // eslint-disable-next-line no-console
-    console.log('this.questions', this.questions);
+
     this.questionAmount = this.questions.length;
     this.next();
   }
@@ -109,6 +92,13 @@ export class LearningComponent implements OnInit {
       this.question = this.questionItem?.question;
       this.correctAnswer = this.questionItem?.correctAnswer;
       this.tiles = this.questionItem?.prompts;
+      if (!this.questionItem?.prompts?.includes(this.questionItem?.correctAnswer || '')) {
+        this.questionItem?.prompts?.pop();
+        this.questionItem?.prompts?.push(this.questionItem?.correctAnswer || '');
+        this.questionItem?.prompts?.reverse();
+      }
+      // eslint-disable-next-line no-console
+      console.log('this.questions', this.questions);
     } else if (this.questionAmount) {
       this.complete = true;
       this.questionType = '';
@@ -132,16 +122,14 @@ export class LearningComponent implements OnInit {
 
     timer(2000).subscribe(x => {
       if (this.correctAnswer === answer) {
-        // if (iuitem !== undefined) {
-        const correctAnswers = iuitem?.correctAnswers ? iuitem?.correctAnswers : 1;
+        const correctAnswers = iuitem?.correctAnswers ? iuitem?.correctAnswers + 1 : 1;
         iuitem.correctAnswers = correctAnswers;
         if (correctAnswers >= 3) {
           iuitem.learned = true;
         }
-        // }
         this.next();
       } else if (this.questionItem) {
-        const wrongAnswers = iuitem?.wrongAnswers ? iuitem?.wrongAnswers : 1;
+        const wrongAnswers = iuitem?.wrongAnswers ? iuitem?.wrongAnswers + 1 : 1;
         iuitem.wrongAnswers = wrongAnswers;
         this.questions.push(this.questionItem);
         this.next();

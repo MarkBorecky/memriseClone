@@ -2,6 +2,7 @@ package com.example.web.rest;
 
 import com.example.domain.Course;
 import com.example.repository.CourseRepository;
+import com.example.repository.UserCourseRepository;
 import com.example.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -41,9 +42,11 @@ public class CourseResource {
     private String applicationName;
 
     private final CourseRepository courseRepository;
+    private final UserCourseRepository userCourseRepository;
 
-    public CourseResource(CourseRepository courseRepository) {
+    public CourseResource(CourseRepository courseRepository, UserCourseRepository userCourseRepository) {
         this.courseRepository = courseRepository;
+        this.userCourseRepository = userCourseRepository;
     }
 
     /**
@@ -120,7 +123,8 @@ public class CourseResource {
      */
     @GetMapping("/courses/user")
     public ResponseEntity<List<Course>> getCoursesByUser() {
-        List<Course> courses = courseRepository.findByUserIsCurrentUser();
+        List<Long> coursesIds = userCourseRepository.findByUserIsCurrentUser();
+        List<Course> courses = courseRepository.findAllById(coursesIds);
         return ResponseEntity.ok().body(courses);
     }
 

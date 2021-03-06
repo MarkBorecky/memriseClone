@@ -25,7 +25,7 @@ public class UserCourseService {
     }
 
     public void startLearning(Long courseId) {
-        UserCourse uc = userCourseRepository.findByCourseId(courseId);
+        UserCourse uc = userCourseRepository.findByCourseIdAndUserId(courseId);
         System.out.printf("UC %s\n", uc);
         if (uc == null) {
             Course course = courseRepository.findById(courseId).orElseThrow(IllegalAccessError::new);
